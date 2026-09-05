@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商标查询.cn - 专业商标注册查询系统</title>
+<meta name="description" content="商标查询.cn提供专业商标注册查询服务，支持商标近似查询、尼斯分类查询、商标注册流程指导，免费查询提高注册成功率。">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+
+<!-- tj.262m.com 统计代码 -->
+<script defer src="https://tj.262m.com/script.js" data-website-id="6df21dfe-7ffd-436b-9f4a-26973a02239a"></script>
+<style>
+/* ===== 全局变量与重置 ===== */
+:root {
+  --seal-red: #B91C1C;
+  --seal-red-dark: #991B1B;
+  --seal-red-light: #FEE2E2;
+  --navy: #1E3A5F;
+  --navy-light: #2C5282;
+  --gold: #B8860B;
+  --gold-light: #D4A843;
+  --paper: #FAF7F2;
+  --paper-dark: #F3EEE6;
+  --ink: #1A1A1A;
+  --ink-soft: #4A4A4A;
+  --ink-light: #888;
+  --border: #E5DFD5;
+  --white: #FFFFFF;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+  --radius: 6px;
+  --font-serif: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: inherit; }
+input, select, textarea { font-family: inherit; font-size: inherit; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== 印章 Logo ===== */
+.seal-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.seal-mark {
+  width: 44px;
+  height: 44px;
+  border: 2.5px solid var(--seal-red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-weight: 900;
+  font-size: 20px;
+  color: var(--seal-red);
+  position: relative;
+  flex-shrink: 0;
+}
+.seal-mark::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--seal-red);
+  border-radius: 50%;
+  opacity: 0.5;
+}
+.seal-text {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--navy);
+  letter-spacing: 1px;
+}
+.seal-text small {
+  display: block;
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 10px;
+  color: var(--ink-light);
+  letter-spacing: 2px;
+  margin-top: 2px;
+}
+
+/* ===== 导航栏 ===== */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  transition: color 0.2s;
+  position: relative;
+  padding: 4px 0;
+}
+.nav-links a:hover, .nav-links a.active {
+  color: var(--seal-red);
+}
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--seal-red);
+}
+.nav-cta {
+  background: var(--seal-red);
+  color: var(--white) !important;
+  padding: 8px 20px !important;
+  border-radius: var(--radius);
+  font-weight: 500 !important;
+  transition: background 0.2s !important;
+}
+.nav-cta:hover { background: var(--seal-red-dark) !important; }
+.nav-cta::after { display: none !important; }
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  padding: 8px;
+}
+.menu-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--ink);
+  margin: 5px 0;
+  transition: 0.3s;
+}
+
+/* ===== Hero 区 ===== */
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, #152A45 100%);
+  color: var(--white);
+  padding: 60px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 50%;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -150px;
+  left: -80px;
+  width: 350px;
+  height: 350px;
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 50%;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+.hero-title .accent { color: var(--gold-light); }
+.hero-subtitle {
+  font-size: 17px;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 28px;
+  line-height: 1.8;
+}
+.hero-features {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.hero-feature {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.85);
+}
+.hero-feature svg { width: 18px; height: 18px; color: var(--gold-light); flex-shrink: 0; }
+
+/* ===== 查询表单 ===== */
+.query-card {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+  color: var(--ink);
+}
+.query-card-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.query-card-header h3 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.query-card-header p {
+  font-size: 13px;
+  color: var(--ink-light);
+}
+.form-group {
+  margin-bottom: 16px;
+}
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.form-label .req { color: var(--seal-red); margin-left: 2px; }
+.form-input, .form-select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--white);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.form-input:focus, .form-select:focus {
+  border-color: var(--seal-red);
+  box-shadow: 0 0 0 3px rgba(185,28,28,0.1);
+}
+.form-input::placeholder { color: var(--ink-light); }
+.type-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.type-option {
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--white);
+  color: var(--ink-soft);
+  user-select: none;
+}
+.type-option:hover { border-color: var(--seal-red); color: var(--seal-red); }
+.type-option.selected {
+  background: var(--seal-red);
+  color: var(--white);
+  border-color: var(--seal-red);
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--seal-red) 0%, var(--seal-red-dark) 100%);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  transition: transform 0.15s, box-shadow 0.2s;
+  margin-top: 8px;
+}
+.btn-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(185,28,28,0.35);
+}
+.btn-submit:active { transform: translateY(0); }
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+.form-tip {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-light);
+  margin-top: 12px;
+}
+.form-tip a { color: var(--seal-red); text-decoration: underline; }
+
+/* ===== 通用区块 ===== */
+.section {
+  padding: 72px 0;
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.section-eyebrow {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--seal-red);
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+.section-desc {
+  font-size: 15px;
+  color: var(--ink-soft);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== 服务卡片 ===== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.service-card {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 32px 24px;
+  text-align: center;
+  border: 1px solid var(--border);
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--seal-red-light);
+}
+.service-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 18px;
+  background: var(--seal-red-light);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.service-icon svg { width: 28px; height: 28px; color: var(--seal-red); }
+.service-card h4 {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.service-card p {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+/* ===== 流程时间线 ===== */
+.process-section {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  position: relative;
+}
+.process-step {
+  text-align: center;
+  padding: 0 16px;
+  position: relative;
+}
+.step-number {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  background: var(--white);
+  border: 2px solid var(--seal-red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--seal-red);
+  position: relative;
+  z-index: 1;
+}
+.process-step:not(:last-child) .step-number::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: calc(100% + 16px);
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--border) 0, var(--border) 6px, transparent 6px, transparent 12px);
+  transform: translateY(-50%);
+  z-index: 0;
+}
+.step-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+.step-desc {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* ===== 资讯预览 ===== */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.news-card {
+  background: var(--white);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: transform 0.25s, box-shadow 0.25s;
+  cursor: pointer;
+}
+.news-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+.news-card-cover {
+  height: 160px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.news-card-cover::before {
+  content: '';
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  top: -30px;
+  right: -30px;
+}
+.news-card-cover svg {
+  width: 48px;
+  height: 48px;
+  color: rgba(255,255,255,0.4);
+  position: relative;
+  z-index: 1;
+}
+.news-card-body {
+  padding: 20px;
+}
+.news-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.news-card-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  background: var(--seal-red-light);
+  color: var(--seal-red);
+  border-radius: 3px;
+  font-weight: 500;
+}
+.news-card-date {
+  font-size: 12px;
+  color: var(--ink-light);
+}
+.news-card-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.5;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.news-card-excerpt {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.news-more {
+  text-align: center;
+  margin-top: 36px;
+}
+.btn-outline {
+  display: inline-block;
+  padding: 10px 32px;
+  border: 1.5px solid var(--seal-red);
+  color: var(--seal-red);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  background: transparent;
+}
+.btn-outline:hover {
+  background: var(--seal-red);
+  color: var(--white);
+}
+
+/* ===== 分类下载 ===== */
+.download-section {
+  background: linear-gradient(135deg, var(--paper-dark) 0%, var(--paper) 100%);
+}
+.download-box {
+  background: var(--white);
+  border-radius: 12px;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  border: 1px solid var(--border);
+}
+.download-info h3 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.download-info p {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: var(--seal-red);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.btn-primary:hover { background: var(--seal-red-dark); }
+.btn-primary svg { width: 18px; height: 18px; }
+
+/* ===== 页脚 ===== */
+.footer {
+  background: var(--navy);
+  color: rgba(255,255,255,0.7);
+  padding: 56px 0 0;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 40px;
+}
+.footer-brand .seal-text { color: var(--white); }
+.footer-brand .seal-text small { color: rgba(255,255,255,0.4); }
+.footer-brand p {
+  font-size: 13px;
+  line-height: 1.8;
+  margin-top: 16px;
+  color: rgba(255,255,255,0.55);
+}
+.footer-col h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 10px; }
+.footer-col a {
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--gold-light); }
+.footer-config {
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  padding: 16px;
+}
+.footer-config h5 { margin-bottom: 10px; }
+.footer-config input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+  background: rgba(255,255,255,0.08);
+  color: var(--white);
+  font-size: 13px;
+  margin-bottom: 8px;
+  outline: none;
+}
+.footer-config input::placeholder { color: rgba(255,255,255,0.35); }
+.footer-config input:focus { border-color: var(--gold-light); }
+.footer-config button {
+  width: 100%;
+  padding: 8px;
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.footer-config button:hover { background: var(--gold-light); }
+.footer-config .hint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 20px 0;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+}
+
+/* ===== 资讯列表页 ===== */
+.page-header {
+  background: linear-gradient(135deg, var(--navy) 0%, #152A45 100%);
+  color: var(--white);
+  padding: 48px 0;
+  text-align: center;
+}
+.page-header h1 {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.page-header p {
+  font-size: 15px;
+  color: rgba(255,255,255,0.7);
+}
+.news-list-section { padding: 48px 0 72px; }
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.news-list-item {
+  display: flex;
+  gap: 24px;
+  background: var(--white);
+  border-radius: 10px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  transition: box-shadow 0.25s, transform 0.25s;
+  cursor: pointer;
+}
+.news-list-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateX(4px);
+}
+.news-list-cover {
+  width: 180px;
+  height: 120px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.news-list-cover svg { width: 40px; height: 40px; color: rgba(255,255,255,0.35); }
+.news-list-content { flex: 1; min-width: 0; }
+.news-list-content h3 {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.news-list-content p {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.news-list-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--ink-light);
+}
+
+/* ===== 文章详情页 ===== */
+.article-section { padding: 48px 0 72px; }
+.article-wrapper {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--white);
+  border-radius: 12px;
+  padding: 48px;
+  border: 1px solid var(--border);
+}
+.article-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--seal-red);
+  margin-bottom: 24px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.article-back svg { width: 16px; height: 16px; }
+.article-back:hover { text-decoration: underline; }
+.article-title {
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+  font-size: 13px;
+  color: var(--ink-light);
+}
+.article-body {
+  font-size: 15px;
+  line-height: 2;
+  color: var(--ink-soft);
+}
+.article-body h2 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--navy);
+  margin: 32px 0 14px;
+  padding-left: 12px;
+  border-left: 3px solid var(--seal-red);
+}
+.article-body h3 {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--navy);
+  margin: 24px 0 10px;
+}
+.article-body p { margin-bottom: 16px; }
+.article-body ul, .article-body ol {
+  margin: 12px 0 16px 24px;
+}
+.article-body li { margin-bottom: 8px; }
+.article-body strong { color: var(--ink); font-weight: 600; }
+.article-body blockquote {
+  border-left: 3px solid var(--gold);
+  background: var(--paper);
+  padding: 14px 20px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: var(--ink-soft);
+  border-radius: 0 6px 6px 0;
+}
+
+/* ===== Toast 提示 ===== */
+.toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 9999;
+  opacity: 0;
+  transition: all 0.3s;
+  pointer-events: none;
+  box-shadow: var(--shadow-lg);
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.toast.success { background: #16A34A; color: var(--white); }
+.toast.error { background: var(--seal-red); color: var(--white); }
+.toast.info { background: var(--navy); color: var(--white); }
+
+/* ===== 视图切换 ===== */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ===== 响应式 ===== */
+@media (max-width: 960px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+  .hero-title { font-size: 32px; }
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .process-steps { grid-template-columns: repeat(2, 1fr); gap: 32px 0; }
+  .process-step:not(:last-child) .step-number::after { display: none; }
+  .news-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .download-box { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 640px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 68px;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    flex-direction: column;
+    padding: 16px 24px;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links a { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .nav-cta { text-align: center; margin-top: 8px; }
+  .menu-toggle { display: block; }
+  .hero-title { font-size: 26px; }
+  .hero { padding: 40px 0 56px; }
+  .query-card { padding: 24px 20px; }
+  .form-row { grid-template-columns: 1fr; }
+  .services-grid { grid-template-columns: 1fr; }
+  .section { padding: 48px 0; }
+  .section-title { font-size: 24px; }
+  .news-list-item { flex-direction: column; }
+  .news-list-cover { width: 100%; height: 140px; }
+  .article-wrapper { padding: 28px 20px; }
+  .article-title { font-size: 22px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .process-steps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 导航栏 ===== -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="#/" class="seal-logo">
+      <span class="seal-mark">商</span>
+      <span class="seal-text">商标查询<small>TRADEMARK QUERY</small></span>
+    </a>
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#/" data-nav="home">首页</a></li>
+      <li><a href="#/" data-nav="query">商标查询</a></li>
+      <li><a href="#news" data-nav="news">商标资讯</a></li>
+      <li><a href="#/" class="nav-cta" onclick="scrollToQuery()">免费查询</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== 视图：首页 ===== -->
+<div id="view-home" class="view active">
+
+  <!-- Hero + 查询表单 -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <h1 class="hero-title">专业商标查询<br><span class="accent">注册前先查，提高成功率</span></h1>
+        <p class="hero-subtitle">覆盖45类商标全品类查询，专业顾问一对一近似分析，帮您规避注册风险，高效获取商标专用权。</p>
+        <div class="hero-features">
+          <div class="hero-feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            免费查询
+          </div>
+          <div class="hero-feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            近似分析
+          </div>
+          <div class="hero-feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            风险评估
+          </div>
+          <div class="hero-feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            全程跟进
+          </div>
+        </div>
+      </div>
+
+      <!-- 查询表单 -->
+      <div class="query-card" id="queryForm">
+        <div class="query-card-header">
+          <h3>商标免费查询</h3>
+          <p>注册前先查询，提高注册成功率</p>
+        </div>
+        <form id="trademarkForm" onsubmit="submitQuery(event)">
+          <div class="form-group">
+            <label class="form-label">商标类别<span class="req">*</span></label>
+            <select class="form-select" id="tmCategory" required>
+              <option value="">请选择商标类别</option>
+              <option value="第1类-化学原料">第1类 - 化学原料</option>
+              <option value="第2类-颜料油漆">第2类 - 颜料油漆</option>
+              <option value="第3类-日化用品">第3类 - 日化用品</option>
+              <option value="第4类-燃料油脂">第4类 - 燃料油脂</option>
+              <option value="第5类-医药">第5类 - 医药</option>
+              <option value="第6类-金属材料">第6类 - 金属材料</option>
+              <option value="第7类-机械设备">第7类 - 机械设备</option>
+              <option value="第8类-手工器械">第8类 - 手工器械</option>
+              <option value="第9类-科学仪器">第9类 - 科学仪器</option>
+              <option value="第10类-医疗器械">第10类 - 医疗器械</option>
+              <option value="第11类-灯具空调">第11类 - 灯具空调</option>
+              <option value="第12类-运输工具">第12类 - 运输工具</option>
+              <option value="第13类-军火烟火">第13类 - 军火烟火</option>
+              <option value="第14类-珠宝钟表">第14类 - 珠宝钟表</option>
+              <option value="第15类-乐器">第15类 - 乐器</option>
+              <option value="第16类-办公用品">第16类 - 办公用品</option>
+              <option value="第17类-橡胶制品">第17类 - 橡胶制品</option>
+              <option value="第18类-皮革皮具">第18类 - 皮革皮具</option>
+              <option value="第19类-建筑材料">第19类 - 建筑材料</option>
+              <option value="第20类-家具">第20类 - 家具</option>
+              <option value="第21类-厨房洁具">第21类 - 厨房洁具</option>
+              <option value="第22类-绳网袋篷">第22类 - 绳网袋篷</option>
+              <option value="第23类-纱线丝">第23类 - 纱线丝</option>
+              <option value="第24类-布料床单">第24类 - 布料床单</option>
+              <option value="第25类-服装鞋帽">第25类 - 服装鞋帽</option>
+              <option value="第26类-纽扣拉链">第26类 - 纽扣拉链</option>
+              <option value="第27类-地毯席垫">第27类 - 地毯席垫</option>
+              <option value="第28类-健身器材">第28类 - 健身器材</option>
+              <option value="第29类-食品">第29类 - 食品</option>
+              <option value="第30类-方便食品">第30类 - 方便食品</option>
+              <option value="第31类-饲料种籽">第31类 - 饲料种籽</option>
+              <option value="第32类-啤酒饮料">第32类 - 啤酒饮料</option>
+              <option value="第33类-酒">第33类 - 酒</option>
+              <option value="第34类-烟草烟具">第34类 - 烟草烟具</option>
+              <option value="第35类-广告销售">第35类 - 广告销售</option>
+              <option value="第36类-金融物管">第36类 - 金融物管</option>
+              <option value="第37类-建筑修理">第37类 - 建筑修理</option>
+              <option value="第38类-通讯服务">第38类 - 通讯服务</option>
+              <option value="第39类-运输贮藏">第39类 - 运输贮藏</option>
+              <option value="第40类-材料加工">第40类 - 材料加工</option>
+              <option value="第41类-教育娱乐">第41类 - 教育娱乐</option>
+              <option value="第42类-科技服务">第42类 - 科技服务</option>
+              <option value="第43类-餐饮住宿">第43类 - 餐饮住宿</option>
+              <option value="第44类-医疗园艺">第44类 - 医疗园艺</option>
+              <option value="第45类-社会服务">第45类 - 社会服务</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">商标类型</label>
+            <div class="type-options" id="typeOptions">
+              <span class="type-option selected" data-value="汉字" onclick="selectType(this)">汉字</span>
+              <span class="type-option" data-value="拼音" onclick="selectType(this)">拼音</span>
+              <span class="type-option" data-value="英文" onclick="selectType(this)">英文</span>
+              <span class="type-option" data-value="数字" onclick="selectType(this)">数字</span>
+              <span class="type-option" data-value="字头" onclick="selectType(this)">字头</span>
+              <span class="type-option" data-value="图形" onclick="selectType(this)">图形</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">商标名称<span class="req">*</span></label>
+            <input type="text" class="form-input" id="tmName" placeholder="请输入待查询商标名称，例如：京东" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">联系电话<span class="req">*</span></label>
+              <input type="tel" class="form-input" id="tmPhone" placeholder="请输入手机号" required pattern="[0-9]{11}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">申请人姓名</label>
+              <input type="text" class="form-input" id="tmApplicant" placeholder="选填">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submitBtn">立即免费查询</button>
+          <p class="form-tip">提交后专业顾问将在30分钟内与您联系，提供查询报告</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 服务介绍 -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">OUR SERVICES</span>
+        <h2 class="section-title">全方位知识产权服务</h2>
+        <p class="section-desc">从查询到注册，从国内到国际，提供一站式商标与版权解决方案</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          </div>
+          <h4>商标查询</h4>
+          <p>专业近似查询与风险评估，提前规避注册障碍，提高商标注册成功率。</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg>
+          </div>
+          <h4>商标注册</h4>
+          <p>资深代理师全程代办，材料准备、提交申报、跟进审查一站式服务。</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <h4>国际商标</h4>
+          <p>马德里体系与单一国家注册，助力品牌出海，保护海外市场权益。</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h4>版权登记</h4>
+          <p>作品著作权、软件著作权登记，固定创作证据，全面保护智力成果。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 注册流程 -->
+  <section class="section process-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">PROCESS</span>
+        <h2 class="section-title">商标注册流程</h2>
+        <p class="section-desc">五步走完商标注册全流程，专业顾问全程跟进</p>
+      </div>
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="step-number">1</div>
+          <div class="step-title">专家分析</div>
+          <div class="step-desc">专业顾问近似判断，系统分析给出商标注册方案</div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">2</div>
+          <div class="step-title">提交申报</div>
+          <div class="step-desc">核实客户资料，确认无误后递交商标局申报</div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">3</div>
+          <div class="step-title">受理通知</div>
+          <div class="step-desc">商标局形式审查，下发商标申请受理通知书</div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">4</div>
+          <div class="step-title">实质审查</div>
+          <div class="step-desc">商标局进入实质审查，通过后进入公示期</div>
+        </div>
+        <div class="process-step">
+          <div class="step-number">5</div>
+          <div class="step-title">注册成功</div>
+          <div class="step-desc">公示期无异议，核准注册并下发商标注册证</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 资讯预览 -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">NEWS</span>
+        <h2 class="section-title">商标资讯动态</h2>
+        <p class="section-desc">最新商标政策、注册技巧与行业动态</p>
+      </div>
+      <div class="news-grid" id="newsPreview"></div>
+      <div class="news-more">
+        <a href="#news" class="btn-outline">查看更多资讯</a>
+      </div>
+    </div>
+  </section>
+
+
+
+</div>
+
+<!-- ===== 视图：资讯列表 ===== -->
+<div id="view-news" class="view">
+  <div class="page-header">
+    <div class="container">
+      <h1>商标资讯</h1>
+      <p>最新商标政策解读、注册技巧与行业动态</p>
+    </div>
+  </div>
+  <section class="news-list-section">
+    <div class="container">
+      <div class="news-list" id="newsList"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== 视图：文章详情 ===== -->
+<div id="view-article" class="view">
+  <section class="article-section">
+    <div class="container">
+      <div class="article-wrapper" id="articleWrapper"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== 页脚 ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="seal-logo">
+          <span class="seal-mark" style="border-color: var(--gold-light); color: var(--gold-light);">商</span>
+          <span class="seal-text">商标查询<small>TRADEMARK QUERY</small></span>
+        </div>
+        <p>专业商标注册查询服务平台，致力于为企业和个人提供高效、可靠的知识产权查询与注册服务。域名：商标查询.cn</p>
+      </div>
+      <div class="footer-col">
+        <h5>服务项目</h5>
+        <ul>
+          <li><a href="#/" onclick="scrollToQuery()">商标查询</a></li>
+          <li><a href="#/">商标注册</a></li>
+          <li><a href="#/">国际商标</a></li>
+          <li><a href="#/">版权登记</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>快速导航</h5>
+        <ul>
+          <li><a href="#/">首页</a></li>
+          <li><a href="#news">商标资讯</a></li>
+          <li><a href="#/">关于我们</a></li>
+          <li><a href="#/">联系方式</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 商标查询.cn 版权所有 | 专业商标查询与注册服务平台</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   文章数据 —— 更新资讯时直接修改此数组即可
+   每条文章：id, title, excerpt, category, date, content(HTML)
+   ============================================================ */
+const articles = [
+  {
+    id: 1,
+    title: '2026年商标注册完整流程详解：从查询到拿证',
+    excerpt: '商标注册是企业品牌保护的第一步。本文详细梳理2026年最新商标注册全流程，包括查询、申请、审查、公告、发证五大阶段，帮助您高效完成商标注册。',
+    category: '注册指南',
+    date: '2026-08-28',
+    content: `
+      <p>商标作为企业的重要无形资产，其注册流程一直备受关注。2026年，商标局持续优化审查流程，整体注册周期已缩短至6-8个月。本文将带您完整了解商标注册的每一个环节。</p>
+      <h2>一、注册前准备：商标查询是关键</h2>
+      <p>在提交商标注册申请之前，<strong>商标查询</strong>是必不可少的步骤。通过查询可以了解在先商标情况，评估注册风险，避免因近似被驳回。</p>
+      <ul>
+        <li><strong>文字查询</strong>：检查相同或近似文字商标</li>
+        <li><strong>图形查询</strong>：比对图形要素的近似程度</li>
+        <li><strong>组合查询</strong>：文字+图形组合商标的整体近似判断</li>
+      </ul>
+      <blockquote>建议：查询并非100%保证注册成功，但能显著降低驳回风险。专业代理机构的查询报告更具参考价值。</blockquote>
+      <h2>二、提交申请阶段</h2>
+      <p>准备好申请材料后，可通过商标局网上服务系统或委托代理机构提交申请。所需材料包括：</p>
+      <ol>
+        <li>商标注册申请书</li>
+        <li>申请人身份证明文件（个人：身份证+个体户执照；企业：营业执照）</li>
+        <li>商标图样（JPG格式，清晰可辨）</li>
+        <li>指定使用的商品/服务类别及项目</li>
+      </ol>
+      <h2>三、形式审查与受理</h2>
+      <p>商标局收到申请后进行形式审查，主要检查申请文件是否齐备、填写是否规范。审查通过后，约1个月左右下发<strong>商标注册申请受理通知书</strong>。</p>
+      <h2>四、实质审查</h2>
+      <p>这是商标注册最核心的环节，审查周期约4-5个月。商标局会审查：</p>
+      <ul>
+        <li>商标是否具有显著性</li>
+        <li>是否违反禁用条款</li>
+        <li>是否与在先商标构成近似</li>
+      </ul>
+      <h2>五、初审公告与注册公告</h2>
+      <p>实质审查通过后，商标进入<strong>初审公告期</strong>（3个月）。公告期内无人提出异议的，商标核准注册并下发<strong>商标注册证</strong>。</p>
+      <h2>六、注册成功后的维护</h2>
+      <p>商标注册成功后，有效期为10年。期满前12个月内可办理续展，每次续展有效期10年。同时要注意规范使用商标，保留使用证据，防止被撤销。</p>
+      <p>以上就是2026年商标注册的完整流程。如有疑问，建议咨询专业商标代理机构获取一对一指导。</p>
+    `
+  },
+  {
+    id: 2,
+    title: '商标查询为什么重要？不查询直接注册的三大风险',
+    excerpt: '很多人认为商标查询可有可无，实际上不做查询直接提交申请，可能面临驳回、浪费时间和金钱的三重损失。本文为您解析商标查询的真正价值。',
+    category: '查询技巧',
+    date: '2026-08-20',
+    content: `
+      <p>在商标代理实践中，我们经常遇到客户问："我能不能直接注册，不查询？"答案是：可以，但不建议。商标查询虽然不是注册的法定必经程序，却是规避风险最有效的手段。</p>
+      <h2>风险一：因近似被驳回，官费不退</h2>
+      <p>商标注册申请需要缴纳官费（纸质申请300元/类，网上申请270元/类）。如果因与在先商标近似被驳回，<strong>官费是不予退还的</strong>。一笔看似不多的费用，累积起来也是不小的损失。</p>
+      <blockquote>2025年商标驳回率约为40%，其中大部分驳回理由是与在先商标近似。如果提前查询，可以规避约60%的驳回风险。</blockquote>
+      <h2>风险二：浪费6-8个月时间成本</h2>
+      <p>商标从提交到拿到审查结果，需要4-6个月。如果被驳回，不仅之前的时间白费，还需要考虑是否做驳回复审（又需9-12个月）或重新申请。对于正在使用品牌的企业来说，<strong>时间成本远大于金钱成本</strong>。</p>
+      <h2>风险三：品牌推广付诸东流</h2>
+      <p>最严重的情况是：企业已经投入大量资金做品牌推广、产品包装、门店装修，结果商标被驳回或被他人异议，导致<strong>已经使用的品牌标识无法继续使用</strong>，前期投入全部打水漂。</p>
+      <h2>如何做一次有效的商标查询？</h2>
+      <h3>1. 确定查询类别</h3>
+      <p>商标按尼斯分类分为45个类别，查询需要在目标类别及关联类别中进行。例如做餐饮的，除了第43类餐饮住宿，还应关注第35类广告销售、第29类食品等。</p>
+      <h3>2. 拆分查询要素</h3>
+      <p>组合商标要拆分查询：文字部分单独查、图形部分单独查、英文部分单独查。任何一部分与在先商标近似，整体都可能被驳回。</p>
+      <h3>3. 专业判断近似度</h3>
+      <p>商标近似判断不是简单的"像不像"，而是涉及音、形、义、构图等多维度的专业判断。建议委托专业代理机构出具查询报告。</p>
+      <h2>总结</h2>
+      <p>商标查询是成本最低的风险防控手段。花几分钟做一次查询，可能帮您省下数千元和大半年时间。<strong>注册前先查询，永远是明智之选。</strong></p>
+    `
+  },
+  {
+    id: 3,
+    title: '尼斯分类表2026版更新要点：这些类别调整要注意',
+    excerpt: '2026版尼斯分类表已于年初正式启用，部分商品和服务项目发生了调整。本文梳理主要变更内容，帮助您在商标注册时准确选择类别。',
+    category: '政策解读',
+    date: '2026-08-15',
+    content: `
+      <p>尼斯分类（Nice Classification）是商标注册用商品和服务国际分类的通行标准，由世界知识产权组织（WIPO）管理，每五年修订一次。2026版分类表已经正式启用，以下是主要更新要点。</p>
+      <h2>一、什么是尼斯分类？</h2>
+      <p>尼斯协定全称为《商标注册用商品和服务国际分类尼斯协定》，目前已有超过140个国家和地区采用。我国于1994年加入尼斯协定，商标注册一直使用尼斯分类。</p>
+      <p>分类表将商品和服务分为<strong>45个类别</strong>，其中第1-34类为商品，第35-45类为服务。</p>
+      <h2>二、2026版主要调整</h2>
+      <h3>第9类（科学仪器）新增项目</h3>
+      <ul>
+        <li>新增"人工智能设备"相关项目描述</li>
+        <li>细化"可下载的计算机应用软件"子类</li>
+        <li>新增"虚拟现实（VR）设备"具体项目</li>
+      </ul>
+      <h3>第35类（广告销售）调整</h3>
+      <ul>
+        <li>"为零售目的在通信媒体上展示商品"描述优化</li>
+        <li>新增"通过网站提供商业信息"细化项</li>
+      </ul>
+      <h3>第41类（教育娱乐）新增</h3>
+      <ul>
+        <li>新增"在线电子书籍和杂志的出版"项目</li>
+        <li>细化"提供在线电子出版物"服务描述</li>
+      </ul>
+      <h3>第42类（科技服务）调整</h3>
+      <ul>
+        <li>"云计算"相关服务项目进一步细化</li>
+        <li>新增"软件即服务（SaaS）"明确项目</li>
+      </ul>
+      <h2>三、对商标注册的影响</h2>
+      <p><strong>1. 选择商品/服务项目更精准</strong>：新增项目让申请人可以更准确地指定保护范围，避免因项目不匹配导致保护漏洞。</p>
+      <p><strong>2. 已注册商标不受影响</strong>：分类表调整不影响已注册商标的有效性，已核准注册的商标继续有效。</p>
+      <p><strong>3. 续展时可考虑调整</strong>：商标续展时，如果原核定项目在新版中有更精确的对应项，可以考虑在续展时一并调整。</p>
+      <blockquote>注意：分类表调整后，部分原项目可能被移到其他类别或被合并。提交新申请时务必使用最新版分类表。</blockquote>
+      <h2>四、如何获取最新分类表？</h2>
+      <p>您可以通过以下途径获取2026版尼斯分类表：</p>
+      <ol>
+        <li>国家知识产权局商标局官网下载</li>
+        <li>世界知识产权组织（WIPO）官网查询</li>
+        <li>联系专业商标代理机构获取整理版</li>
+      </ol>
+      <p>准确选择商品和服务类别是商标注册的基础。建议在注册前咨询专业人士，确保类别选择全面、精准。</p>
+    `
+  },
+  {
+    id: 4,
+    title: '商标被驳回了怎么办？驳回复审全攻略',
+    excerpt: '商标被驳回不等于判了死刑。本文详细介绍商标驳回复审的条件、流程、成功率和注意事项，教您如何有效应对驳回通知。',
+    category: '维权指南',
+    date: '2026-08-10',
+    content: `
+      <p>收到商标驳回通知书时，很多申请人的第一反应是"完了，注册失败了"。其实不然，商标驳回只是审查员的初步判断，申请人有权在规定时间内申请复审，争取商标注册。</p>
+      <h2>一、驳回的类型</h2>
+      <h3>1. 绝对理由驳回</h3>
+      <p>商标本身违反《商标法》禁止性规定，例如：</p>
+      <ul>
+        <li>仅有本商品的通用名称、图形、型号</li>
+        <li>仅直接表示商品的质量、主要原料、功能等特点</li>
+        <li>带有欺骗性，容易使公众对商品质量等产生误认</li>
+        <li>有害于社会主义道德风尚或有其他不良影响</li>
+      </ul>
+      <h3>2. 相对理由驳回</h3>
+      <p>商标与他人在先注册或在先申请的商标构成近似，这是最常见的驳回理由。</p>
+      <h2>二、驳回复审的条件</h2>
+      <p>并非所有驳回都适合做复审，以下情况建议考虑复审：</p>
+      <ul>
+        <li><strong>相对理由驳回</strong>：与引证商标存在差异，有争辩空间</li>
+        <li><strong>审查员判断有误</strong>：对商标近似性或显著性的认定存在争议</li>
+        <li><strong>引证商标存在权利瑕疵</strong>：如引证商标已到期未续展、已被撤销等</li>
+        <li><strong>商标经过使用已获得显著性</strong>：可以提供大量使用证据</li>
+      </ul>
+      <blockquote>绝对理由驳回复审成功率较低，需谨慎评估。相对理由驳回复审成功率约为30%-40%，具体取决于案件情况。</blockquote>
+      <h2>三、驳回复审流程</h2>
+      <ol>
+        <li><strong>收到驳回通知</strong>：商标局下发《商标驳回通知书》</li>
+        <li><strong>15日内申请复审</strong>：向商标评审委员会提交复审申请（注意：是15个自然日，不是工作日）</li>
+        <li><strong>提交复审材料</strong>：包括复审申请书、理由书、证据材料等</li>
+        <li><strong>商评委审理</strong>：审理周期约9-12个月</li>
+        <li><strong>复审决定</strong>：维持驳回或准予初步审定</li>
+      </ol>
+      <h2>四、提高复审成功率的关键</h2>
+      <h3>1. 充分准备使用证据</h3>
+      <p>包括销售合同、发票、广告宣传材料、获奖证明等，证明商标经过使用已具有一定知名度和显著性。</p>
+      <h3>2. 专业的近似性分析</h3>
+      <p>从音、形、义、整体视觉效果等多维度论证申请商标与引证商标不构成近似。</p>
+      <h3>3. 考虑引证商标的状态</h3>
+      <p>调查引证商标是否存在连续三年不使用、到期未续展等情况，必要时可同时提出撤销申请。</p>
+      <h2>五、复审失败后的救济途径</h2>
+      <p>如果驳回复审也失败了，还可以：</p>
+      <ul>
+        <li>向北京知识产权法院提起行政诉讼（一审）</li>
+        <li>不服一审判决可上诉至北京市高级人民法院（二审）</li>
+      </ul>
+      <p>商标被驳回并不可怕，关键是及时应对、专业评估。建议收到驳回通知后尽快咨询专业商标律师，制定复审策略。</p>
+    `
+  },
+  {
+    id: 5,
+    title: '个人注册商标 vs 公司注册商标：区别与选择建议',
+    excerpt: '个人和公司都可以申请商标注册，但在申请材料、权利归属、使用要求等方面存在差异。本文帮您理清区别，选择最适合的注册方式。',
+    category: '注册指南',
+    date: '2026-08-05',
+    content: `
+      <p>经常有客户问："我应该用个人名义还是公司名义注册商标？"这两种方式各有优劣，选择取决于您的实际情况和长远规划。</p>
+      <h2>一、申请条件对比</h2>
+      <h3>个人名义注册</h3>
+      <ul>
+        <li>需要提供<strong>个体工商户营业执照</strong>（自2007年起，纯个人身份证不能注册商标）</li>
+        <li>经营者身份证复印件</li>
+        <li>商标指定使用的商品/服务范围需与个体户经营范围相关</li>
+      </ul>
+      <h3>公司名义注册</h3>
+      <ul>
+        <li>需要提供<strong>企业营业执照</strong>复印件</li>
+        <li>不受经营范围限制，可注册任意类别</li>
+        <li>需加盖公司公章</li>
+      </ul>
+      <h2>二、核心区别</h2>
+      <h3>1. 权利归属不同</h3>
+      <p><strong>个人注册</strong>：商标权归个人所有，属于个人财产。即使个体户注销，商标权仍然有效。</p>
+      <p><strong>公司注册</strong>：商标权归公司所有，属于公司资产。公司注销时，商标需要提前转让，否则将随公司消亡。</p>
+      <h3>2. 稳定性不同</h3>
+      <p>个人注册的商标更稳定，不受公司经营状况影响。公司注册的商标，如果公司发生变更（名称、地址等），商标也需要同步做变更备案。</p>
+      <h3>3. 使用要求</h3>
+      <p>两者都需要在注册后5年内实际使用，否则可能被他人以"连续三年不使用"为由申请撤销。个人注册的商标，个人或其许可的他人使用均可视为使用。</p>
+      <h3>4. 转让与许可</h3>
+      <p>个人商标转让只需个人签字；公司商标转让需要公司盖章并可能涉及股东会决议。</p>
+      <h2>三、选择建议</h2>
+      <blockquote><strong>建议用公司名义注册的情况：</strong></blockquote>
+      <ul>
+        <li>商标主要用于公司经营的产品/服务</li>
+        <li>计划未来融资、估值，商标作为公司资产</li>
+        <li>多个股东共同持有品牌</li>
+        <li>需要入驻电商平台（部分平台要求公司主体）</li>
+      </ul>
+      <blockquote><strong>建议用个人名义注册的情况：</strong></blockquote>
+      <ul>
+        <li>个体工商户经营者，品牌与个人紧密绑定</li>
+        <li>担心公司未来变动影响商标</li>
+        <li>计划将商标授权给多家公司使用</li>
+        <li>自由职业者、个人创作者的品牌保护</li>
+      </ul>
+      <h2>四、常见问题</h2>
+      <h3>Q：个人注册的商标，公司可以用吗？</h3>
+      <p>A：可以。个人可以将商标许可给公司使用，签订商标使用许可合同并向商标局备案即可。</p>
+      <h3>Q：公司注销了，商标怎么办？</h3>
+      <p>A：公司注销前应将商标转让给个人或其他公司。如果公司已注销，可凭清算报告等材料办理转移。</p>
+      <h3>Q：可以同时用个人和公司注册同一个商标吗？</h3>
+      <p>A：可以，但需要注意如果是完全相同的商标在相同类别，可能会被要求合并或选择其一。建议咨询专业人士。</p>
+      <h2>总结</h2>
+      <p>没有绝对的"哪种更好"，关键是匹配您的商业规划。如果您不确定，建议咨询专业商标代理机构，结合您的具体情况给出建议。</p>
+    `
+  },
+  {
+    id: 6,
+    title: '商标续展全指南：10年到期前必须知道的事',
+    excerpt: '商标注册有效期10年，到期前不续展将被注销。本文详细介绍商标续展的时间、费用、流程和注意事项，避免商标因过期而失效。',
+    category: '维权指南',
+    date: '2026-07-28',
+    content: `
+      <p>商标注册成功不是一劳永逸的。注册商标有效期为10年，自核准注册之日起计算。到期前如果不办理续展手续，商标将被注销，品牌权益随之丧失。</p>
+      <h2>一、续展时间节点</h2>
+      <h3>续展期（提前12个月）</h3>
+      <p>注册商标有效期满前<strong>12个月内</strong>，注册人可以办理续展手续。这是正常的续展窗口期。</p>
+      <h3>宽展期（到期后6个月）</h3>
+      <p>如果在续展期内未能办理，还有<strong>6个月的宽展期</strong>。宽展期内仍可办理续展，但需要额外缴纳延迟费。</p>
+      <blockquote>重要提醒：宽展期满仍未办理续展的，商标局将注销该注册商标。注销后有1年的保护期，他人不能在相同类别注册相同商标，但1年后就可以了。</blockquote>
+      <h2>二、续展费用</h2>
+      <ul>
+        <li><strong>续展期内</strong>：网上申请450元/类，纸质申请500元/类</li>
+        <li><strong>宽展期内</strong>：需额外缴纳延迟费225元/类（网上申请）</li>
+      </ul>
+      <p>以上为商标局官费，委托代理机构还需支付代理费。</p>
+      <h2>三、续展流程</h2>
+      <ol>
+        <li><strong>准备材料</strong>：商标续展注册申请书、申请人身份证明、商标注册证复印件</li>
+        <li><strong>提交申请</strong>：通过商标局网上系统或委托代理机构提交</li>
+        <li><strong>形式审查</strong>：商标局审查申请文件是否齐备</li>
+        <li><strong>核准续展</strong>：审查通过后下发《核准续展注册证明》</li>
+      </ol>
+      <p>续展审查周期约1-2个月，比新注册快很多。续展后商标有效期再延长10年。</p>
+      <h2>四、续展时的注意事项</h2>
+      <h3>1. 注册人信息要一致</h3>
+      <p>如果注册人名称或地址发生过变更，续展前应先办理商标变更手续，确保续展申请人信息与商标局档案一致。</p>
+      <h3>2. 可以一并办理变更</h3>
+      <p>如果商标有多个类别，续展时可以一并办理。每个类别需单独缴纳费用。</p>
+      <h3>3. 保留注册证</h3>
+      <p>续展后商标局下发的是《核准续展注册证明》，需与原《商标注册证》一并使用。原注册证不会换新。</p>
+      <h3>4. 宽展期内商标仍受保护</h3>
+      <p>在宽展期内，商标仍然有效，可以正常使用和维权。但建议尽早办理，避免因材料问题导致超期。</p>
+      <h2>五、忘记续展了怎么办？</h2>
+      <p>如果商标已经因未续展被注销：</p>
+      <ol>
+        <li><strong>注销后1年内</strong>：商标局对相同或近似商标的注册申请不予核准，您可以重新提交注册申请</li>
+        <li><strong>注销超过1年</strong>：他人可以申请注册相同商标，您需要尽快重新申请</li>
+        <li><strong>重新申请</strong>：按新商标注册流程办理，需重新经过审查和公告</li>
+      </ol>
+      <h2>六、建议</h2>
+      <p><strong>建立商标管理台账</strong>：记录每个商标的注册日期、有效期、类别等信息，提前6个月设置续展提醒。</p>
+      <p><strong>委托专业机构</strong>：商标代理机构通常会提供到期提醒服务，避免因疏忽导致商标失效。</p>
+      <p>商标是企业的重要资产，一次续展费用远低于重新注册和品牌重建的成本。请务必重视商标续展！</p>
+    `
+  }
+];
+
+/* ============================================================
+   路由管理
+   ============================================================ */
+function router() {
+  const hash = window.location.hash || '#/';
+  const views = document.querySelectorAll('.view');
+  views.forEach(v => v.classList.remove('active'));
+
+  // 更新导航高亮
+  document.querySelectorAll('.nav-links a[data-nav]').forEach(a => {
+    a.classList.remove('active');
+  });
+
+  if (hash === '#/' || hash === '#') {
+    document.getElementById('view-home').classList.add('active');
+    document.querySelector('[data-nav="home"]').classList.add('active');
+    window.scrollTo(0, 0);
+  } else if (hash === '#news') {
+    document.getElementById('view-news').classList.add('active');
+    document.querySelector('[data-nav="news"]').classList.add('active');
+    renderNewsList();
+    window.scrollTo(0, 0);
+  } else if (hash.startsWith('#article/')) {
+    const id = parseInt(hash.split('/')[1]);
+    document.getElementById('view-article').classList.add('active');
+    renderArticle(id);
+    window.scrollTo(0, 0);
+  } else {
+    document.getElementById('view-home').classList.add('active');
+  }
+
+  // 关闭移动端菜单
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+window.addEventListener('hashchange', router);
+window.addEventListener('load', router);
+
+/* ============================================================
+   渲染：首页资讯预览（最新3篇）
+   ============================================================ */
+function renderNewsPreview() {
+  const container = document.getElementById('newsPreview');
+  const latest = articles.slice(0, 3);
+  container.innerHTML = latest.map(a => `
+    <div class="news-card" onclick="location.hash='#article/${a.id}'">
+      <div class="news-card-cover">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
+      </div>
+      <div class="news-card-body">
+        <div class="news-card-meta">
+          <span class="news-card-tag">${a.category}</span>
+          <span class="news-card-date">${a.date}</span>
+        </div>
+        <h3 class="news-card-title">${a.title}</h3>
+        <p class="news-card-excerpt">${a.excerpt}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ============================================================
+   渲染：资讯列表
+   ============================================================ */
+function renderNewsList() {
+  const container = document.getElementById('newsList');
+  container.innerHTML = articles.map(a => `
+    <div class="news-list-item" onclick="location.hash='#article/${a.id}'">
+      <div class="news-list-cover">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
+      </div>
+      <div class="news-list-content">
+        <h3>${a.title}</h3>
+        <p>${a.excerpt}</p>
+        <div class="news-list-meta">
+          <span class="news-card-tag">${a.category}</span>
+          <span>${a.date}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ============================================================
+   渲染：文章详情
+   ============================================================ */
+function renderArticle(id) {
+  const article = articles.find(a => a.id === id);
+  const wrapper = document.getElementById('articleWrapper');
+  if (!article) {
+    wrapper.innerHTML = '<p style="text-align:center;padding:40px;">文章不存在</p>';
+    return;
+  }
+  wrapper.innerHTML = `
+    <div class="article-back" onclick="location.hash='#news'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      返回资讯列表
+    </div>
+    <h1 class="article-title">${article.title}</h1>
+    <div class="article-meta">
+      <span class="news-card-tag">${article.category}</span>
+      <span>发布日期：${article.date}</span>
+      <span>商标查询.cn</span>
+    </div>
+    <div class="article-body">${article.content}</div>
+  `;
+}
+
+/* ============================================================
+   表单：商标类型选择
+   ============================================================ */
+function selectType(el) {
+  document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function getSelectedType() {
+  const selected = document.querySelector('.type-option.selected');
+  return selected ? selected.dataset.value : '汉字';
+}
+
+/* ============================================================
+   表单：提交查询 + PushPlus 推送
+   ============================================================ */
+function submitQuery(e) {
+  e.preventDefault();
+
+  const category = document.getElementById('tmCategory').value;
+  const type = getSelectedType();
+  const name = document.getElementById('tmName').value.trim();
+  const phone = document.getElementById('tmPhone').value.trim();
+  const applicant = document.getElementById('tmApplicant').value.trim() || '未填写';
+
+  // 手机号验证
+  if (!/^1[3-9]\d{9}$/.test(phone)) {
+    showToast('请输入正确的11位手机号', 'error');
+    return;
+  }
+
+  const DEFAULT_PUSH_TOKEN = '37af69b210224201a5c4ff5a973d36c1';
+  const token = localStorage.getItem('pushplus_token') || DEFAULT_PUSH_TOKEN;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '提交中...';
+
+  // 组装推送内容
+  const title = `【商标查询】${name} - ${category}`;
+  const content = `
+商标查询申请
+━━━━━━━━━━━━
+商标名称：${name}
+商标类别：${category}
+商标类型：${type}
+联系电话：${phone}
+申请人：${applicant}
+提交时间：${new Date().toLocaleString('zh-CN')}
+━━━━━━━━━━━━
+请尽快联系客户提供查询报告。
+  `.trim();
+
+  // 调用 PushPlus API
+  pushPlusSend(token, title, content)
+    .then(() => {
+      showToast('提交成功！顾问将尽快与您联系', 'success');
+      document.getElementById('trademarkForm').reset();
+      document.querySelectorAll('.type-option').forEach((o, i) => {
+        o.classList.toggle('selected', i === 0);
+      });
+    })
+    .catch(err => {
+      showToast('推送失败：' + err.message + '，请检查Token', 'error');
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.textContent = '立即免费查询';
+    });
+}
+
+/* ============================================================
+   PushPlus API 调用（支持跨域）
+   ============================================================ */
+function pushPlusSend(token, title, content) {
+  return new Promise((resolve, reject) => {
+    // 方式一：fetch POST（PushPlus 支持 CORS）
+    fetch('https://www.pushplus.plus/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: token,
+        title: title,
+        content: content.replace(/\n/g, '<br>'),
+        template: 'html'
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.code === 200) {
+        resolve(data);
+      } else {
+        reject(new Error(data.msg || '推送失败'));
+      }
+    })
+    .catch(() => {
+      // 方式二：降级为 GET 请求（JSONP 风格，兼容不支持 CORS 的环境）
+      const callbackName = 'pp_cb_' + Date.now();
+      window[callbackName] = function(data) {
+        if (data.code === 200) resolve(data);
+        else reject(new Error(data.msg || '推送失败'));
+        delete window[callbackName];
+        script.remove();
+      };
+      const script = document.createElement('script');
+      script.src = `https://www.pushplus.plus/send?token=${encodeURIComponent(token)}&title=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}&callback=${callbackName}`;
+      script.onerror = () => {
+        delete window[callbackName];
+        script.remove();
+        reject(new Error('网络请求失败'));
+      };
+      document.body.appendChild(script);
+      // 8秒超时
+      setTimeout(() => {
+        if (window[callbackName]) {
+          delete window[callbackName];
+          script.remove();
+          reject(new Error('请求超时'));
+        }
+      }, 8000);
+    });
+  });
+}
+
+/* ============================================================
+   PushPlus Token 管理
+   ============================================================ */
+function savePushToken() {
+  const token = document.getElementById('pushplusToken').value.trim();
+  if (!token) {
+    showToast('请输入PushPlus Token', 'error');
+    return;
+  }
+  localStorage.setItem('pushplus_token', token);
+  showToast('Token保存成功', 'success');
+}
+
+// 页面加载时恢复Token
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('pushplus_token');
+  const tokenInput = document.getElementById('pushplusToken');
+  if (saved && tokenInput) {
+    tokenInput.value = saved;
+  }
+  renderNewsPreview();
+});
+
+/* ============================================================
+   工具函数
+   ============================================================ */
+function showToast(msg, type = 'info') {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast ' + type;
+  // 强制重排
+  void toast.offsetWidth;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+
+function scrollToQuery() {
+  if (window.location.hash !== '#/' && window.location.hash !== '') {
+    window.location.hash = '#/';
+    setTimeout(() => {
+      document.getElementById('queryForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  } else {
+    document.getElementById('queryForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+</script>
+</body>
+</html>
