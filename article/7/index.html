@@ -3634,6 +3634,7 @@ function router() {
     document.getElementById('view-home').classList.add('active');
     const homeNav = document.querySelector('[data-nav="home"]');
     if (homeNav) homeNav.classList.add('active');
+    renderNewsPreview();
     window.scrollTo(0, 0);
   } else if (path === '/news') {
     document.getElementById('view-news').classList.add('active');
@@ -3756,7 +3757,7 @@ function getSelectedType() {
 }
 
 /* ============================================================
-   表单：提交查询 + PushPlus 推送
+   表单：提交查询 + 飞书机器人推送
    ============================================================ */
 function submitQuery(e) {
   e.preventDefault();
@@ -3772,9 +3773,6 @@ function submitQuery(e) {
     showToast('请输入正确的11位手机号', 'error');
     return;
   }
-
-  const DEFAULT_PUSH_TOKEN = '37af69b210224201a5c4ff5a973d36c1';
-  const token = localStorage.getItem('pushplus_token') || DEFAULT_PUSH_TOKEN;
 
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
@@ -3795,8 +3793,8 @@ function submitQuery(e) {
 请尽快联系客户提供查询报告。
   `.trim();
 
-  // 调用 PushPlus API
-  pushPlusSend(token, title, content)
+  // 调用飞书机器人推送
+  feishuSend(title, content)
     .then(() => {
       showToast('提交成功！顾问将尽快与您联系', 'success');
       document.getElementById('trademarkForm').reset();
@@ -3805,7 +3803,7 @@ function submitQuery(e) {
       });
     })
     .catch(err => {
-      showToast('推送失败：' + err.message + '，请检查Token', 'error');
+      showToast('推送失败：' + err.message, 'error');
     })
     .finally(() => {
       btn.disabled = false;
@@ -3814,80 +3812,29 @@ function submitQuery(e) {
 }
 
 /* ============================================================
-   PushPlus API 调用（支持跨域）
+   飞书机器人 API 调用（自定义机器人 Webhook）
    ============================================================ */
-function pushPlusSend(token, title, content) {
-  return new Promise((resolve, reject) => {
-    // 方式一：fetch POST（PushPlus 支持 CORS）
-    fetch('https://www.pushplus.plus/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        token: token,
-        title: title,
-        content: content.replace(/\n/g, '<br>'),
-        template: 'html'
-      })
+const FEISHU_WEBHOOK = 'https://open.feishu.cn/open-apis/bot/v2/hook/51687816-4eac-4868-9aaf-30699b653e1d';
+
+function feishuSend(title, content) {
+  const text = title + '\n' + content;
+  return fetch(FEISHU_WEBHOOK, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      msg_type: 'text',
+      content: { text: text }
     })
-    .then(res => res.json())
-    .then(data => {
-      if (data.code === 200) {
-        resolve(data);
-      } else {
-        reject(new Error(data.msg || '推送失败'));
-      }
-    })
-    .catch(() => {
-      // 方式二：降级为 GET 请求（JSONP 风格，兼容不支持 CORS 的环境）
-      const callbackName = 'pp_cb_' + Date.now();
-      window[callbackName] = function(data) {
-        if (data.code === 200) resolve(data);
-        else reject(new Error(data.msg || '推送失败'));
-        delete window[callbackName];
-        script.remove();
-      };
-      const script = document.createElement('script');
-      script.src = `https://www.pushplus.plus/send?token=${encodeURIComponent(token)}&title=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}&callback=${callbackName}`;
-      script.onerror = () => {
-        delete window[callbackName];
-        script.remove();
-        reject(new Error('网络请求失败'));
-      };
-      document.body.appendChild(script);
-      // 8秒超时
-      setTimeout(() => {
-        if (window[callbackName]) {
-          delete window[callbackName];
-          script.remove();
-          reject(new Error('请求超时'));
-        }
-      }, 8000);
-    });
+  })
+  .then(res => res.json())
+  .then(data => {
+    // 飞书返回 code=0 或 StatusCode=0 均表示成功
+    if (data.code === 0 || data.StatusCode === 0) {
+      return data;
+    }
+    throw new Error(data.msg || data.StatusMessage || '推送失败');
   });
 }
-
-/* ============================================================
-   PushPlus Token 管理
-   ============================================================ */
-function savePushToken() {
-  const token = document.getElementById('pushplusToken').value.trim();
-  if (!token) {
-    showToast('请输入PushPlus Token', 'error');
-    return;
-  }
-  localStorage.setItem('pushplus_token', token);
-  showToast('Token保存成功', 'success');
-}
-
-// 页面加载时恢复Token
-window.addEventListener('load', () => {
-  const saved = localStorage.getItem('pushplus_token');
-  const tokenInput = document.getElementById('pushplusToken');
-  if (saved && tokenInput) {
-    tokenInput.value = saved;
-  }
-  renderNewsPreview();
-});
 
 /* ============================================================
    工具函数
